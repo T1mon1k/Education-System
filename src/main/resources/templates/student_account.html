@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профіль студента</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Профіль студента</h1>
+<div class="top-buttons">
+    <a href="/" class="btn-home">На головну</a>
+    <a href="/student" class="btn-home">Повернутися до списку студентів</a>
+</div>
+<p class="info">ID: <span th:text="${student.id}"></span></p>
+<p class="info">Ім'я: <span th:text="${student.name}"></span></p>
+<p class="info">Email: <span th:text="${student.email}"></span></p>
+<h1>Список доступних курсів:</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Назва курсу</th>
+        <th>Викладач</th>
+        <th>Дія</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course : ${availableCourses}">
+        <td th:text="${course.id}"></td>
+        <td th:text="${course.title}"></td>
+        <td th:text="${course.teacher.name}"></td>
+        <td>
+            <div class="button-group">
+                <form th:action="@{'/student/' + ${student.id} + '/enroll'}" method="post" style="display: inline;">
+                    <input type="hidden" name="courseId" th:value="${course.id}" />
+                    <button type="submit" class="btn btn-primary">Приєднатися</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h1>Курси, на які ви вже записані:</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Назва курсу</th>
+        <th>Викладач</th>
+        <th>Дія</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course : ${student.courses}">
+        <td th:text="${course.id}"></td>
+        <td th:text="${course.title}"></td>
+        <td th:text="${course.teacher.name}"></td>
+        <td>
+            <div class="button-group">
+                <form th:action="@{'/student/' + ${student.id} + '/leave'}" method="post" style="display: inline;">
+                    <input type="hidden" name="courseId" th:value="${course.id}" />
+                    <button type="submit" class="btn btn-danger">Вийти</button>
+                </form>
+                <form th:action="@{'/course/student/' + ${course.id}}" method="get">
+                    <input type="hidden" name="studentId" th:value="${student.id}" />
+                    <button type="submit" class="btn btn-primary">Перейти до курсу</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

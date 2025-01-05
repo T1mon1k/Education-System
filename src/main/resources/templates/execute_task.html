@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Виконання завдання</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Система управління освітою</h1>
+<div class="top-buttons">
+    <a href="/" class="btn-home">На головну</a>
+    <a th:href="@{'/course/student/' + ${courseId} + '?studentId=' + ${studentId}}" class="btn-home">Повернутися до курсу</a>
+</div>
+<h1 th:text="'Завдання: ' + ${task.title}"></h1>
+<h3 th:text="'Опис: ' + ${task.description}"></h3>
+<form th:action="@{'/task/' + ${task.id} + '/submit'}" method="post" class="form-inline">
+    <div class="form-row">
+        <input type="hidden" name="studentId" th:value="${studentId}" />
+        <input type="hidden" name="courseId" th:value="${courseId}" />
+        <label for="answer">Ваша відповідь:</label>
+        <textarea id="answer" name="answer" required></textarea>
+    </div>
+    <button class="btn-home" type="submit">Здати завдання</button>
+</form>
+</body>
+</html>

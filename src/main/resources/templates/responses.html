@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Відповіді на завдання</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Система управління освітою</h1>
+<div class="top-buttons">
+    <a href="/" class="btn-home">На головну</a>
+    <a th:href="@{'/course/teacher/' + ${courseId}}" class="btn-home">Повернутися до курсу</a>
+</div>
+<h1 th:text="'Відповіді на завдання: ' + ${task.title}"></h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID студента</th>
+        <th>Ім'я</th>
+        <th>Відповідь</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="response : ${responses}">
+        <td th:text="${response.key}"></td>
+        <td>
+            <span th:each="student : ${students}" th:if="${student.id == response.key}" th:text="${student.name}"></span>
+            <span th:if="${#lists.isEmpty(students)}" class="text-muted">Невідомий студент</span>
+        </td>
+        <td th:text="${response.value}"></td>
+    </tr>
+    <tr th:if="${#maps.isEmpty(responses)}">
+        <td colspan="3" class="text-muted">Відповіді відсутні</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

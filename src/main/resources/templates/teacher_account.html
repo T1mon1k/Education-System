@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профіль викладача</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Система управління освітою</h1>
+<div class="top-buttons">
+    <a href="/" class="btn-home">На головну</a>
+    <a href="/teacher" class="btn-home">Повернутися до списку викладачів</a>
+</div>
+<h1>Профіль викладача</h1>
+<p class="info">ID: <span th:text="${teacher.id}"></span></p>
+<p class="info">Ім'я: <span th:text="${teacher.name}"></span></p>
+<p class="info">Email: <span th:text="${teacher.email}"></span></p>
+<h2>Курси, які створив викладач:</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Назва курсу</th>
+        <th>Дія</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course : ${courses}">
+        <td th:text="${course.id}"></td>
+        <td th:text="${course.title}"></td>
+        <td>
+            <div class="button-group">
+                <form th:action="@{'/course/' + ${course.id} + '/delete'}" method="post" style="display: inline;">
+                    <input type="hidden" name="teacherId" th:value="${teacher.id}" />
+                    <button type="submit" class="btn btn-danger">Видалити курс</button>
+                </form>
+                <form th:action="@{'/course/teacher/' + ${course.id} + '?teacherId=' + ${teacher.id}}" method="get">
+                    <button type="submit" class="btn btn-primary">Перейти до курсу</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h2>Додати курс</h2>
+<form th:action="@{'/teacher/' + ${teacher.id} + '/course/add'}" method="post" class="form-inline">
+    <div class="form-row">
+        <label for="title">Назва курсу:</label>
+        <input type="text" id="title" name="title" required />
+    </div>
+    <button class="btn-home" type="submit">Додати</button>
+</form>
+</body>
+</html>

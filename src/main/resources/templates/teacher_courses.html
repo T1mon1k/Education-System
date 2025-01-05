@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курс викладача</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Система управління освітою</h1>
+<div class="top-buttons">
+    <a href="/" class="btn-home">На головну</a>
+    <a href="javascript:history.back()" class="btn-home">Повернутися до профілю</a>
+</div>
+<h1 th:text="'Курс: ' + ${course.title}"></h1>
+<h2 th:text="'Викладач: ' + ${course.teacher.name}"></h2>
+<h2>Список учасників курсу:</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Ім'я</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${students}">
+        <td th:text="${student.id}"></td>
+        <td th:text="${student.name}"></td>
+        <td th:text="${student.email}"></td>
+    </tr>
+    </tbody>
+</table>
+<h2>Список завдань:</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Назва</th>
+        <th>Опис</th>
+        <th>Статус</th>
+        <th>Дії</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task : ${tasks}">
+        <td th:text="${task.id}"></td>
+        <td th:text="${task.title}"></td>
+        <td th:text="${task.description}"></td>
+        <td th:text="${task.active ? 'Активне' : 'Деактивоване'}"></td>
+        <td>
+            <div class="button-group">
+                <form th:action="@{'/task/' + ${task.id} + '/delete'}" method="post" style="display: inline;">
+                    <input type="hidden" name="courseId" th:value="${course.id}" />
+                    <button type="submit" class="btn btn-danger">Видалити</button>
+                </form>
+                <form th:action="@{'/task/' + ${task.id} + '/deactivate'}" method="post" style="display: inline;">
+                    <input type="hidden" name="courseId" th:value="${course.id}" />
+                    <button type="submit" class="btn btn-primary">Деактивувати</button>
+                </form>
+                <form th:action="@{'/task/' + ${task.id} + '/activate'}" method="post" style="display: inline;">
+                    <input type="hidden" name="courseId" th:value="${course.id}" />
+                    <button type="submit" class="btn btn-primary">Активувати</button>
+                </form>
+                <form th:action="@{'/task/' + ${task.id} + '/responses'}" method="get" style="display: inline;">
+                    <input type="hidden" name="courseId" th:value="${course.id}" />
+                    <button type="submit" class="btn btn-primary">Переглянути відповіді</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h2>Додати нове завдання</h2>
+<form th:action="@{'/task/add'}" method="post" class="form-inline">
+    <div class="form-row">
+        <label for="title">Назва завдання:</label>
+        <input type="text" id="title" name="title" required />
+    </div>
+    <div class="form-row">
+        <label for="description">Опис завдання:</label>
+        <textarea id="description" name="description" required></textarea>
+        <input type="hidden" name="courseId" th:value="${course.id}" />
+    </div>
+    <button type="submit" class="btn-home">Додати</button>
+</form>
+</body>
+</html>

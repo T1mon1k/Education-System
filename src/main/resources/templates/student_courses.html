@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сторінка курсу</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Система управління освітою</h1>
+<div class="top-buttons">
+    <a href="/" class="btn-home">На головну</a>
+    <a th:href="@{'/student/' + ${studentId}}" class="btn-home">Повернутися до профілю</a>
+</div>
+<h1 th:text="'Курс: ' + ${course.title}"></h1>
+<h2 th:text="'Викладач: ' + ${course.teacher.name}"></h2>
+<h2 th:text="'Студент: ' + ${student.name}"></h2>
+<h2>Список учасників:</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Ім'я</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${students}">
+        <td th:text="${student.id}"></td>
+        <td th:text="${student.name}"></td>
+        <td th:text="${student.email}"></td>
+    </tr>
+    </tbody>
+</table>
+<h2>Список завдань:</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Назва</th>
+        <th>Опис</th>
+        <th>Статус</th>
+        <th>Дії</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task : ${tasks}">
+        <td th:text="${task.id}"></td>
+        <td th:text="${task.title}"></td>
+        <td th:text="${task.description}"></td>
+        <td>
+            <span th:if="${!task.active}" class="text-muted">Деактивовано</span>
+            <span th:if="${task.active}" th:text="${task.getStudentStatus(studentId) ? 'Виконано' : 'Не виконано'}"></span>
+        </td>
+        <td>
+            <div class="button-group">
+                <form th:if="${task.active && !task.getStudentStatus(studentId)}" th:action="@{'/task/' + ${task.id} + '/execute'}" method="get">
+                    <input type="hidden" name="studentId" th:value="${studentId}" />
+                    <input type="hidden" name="courseId" th:value="${courseId}" />
+                    <button type="submit" class="btn btn-primary">Виконати</button>
+                </form>
+                <span th:if="${!task.active}" class="text-muted">Завдання деактивовано</span>
+                <span th:if="${task.getStudentStatus(studentId)}" class="text-muted">Завдання завершено</span>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
