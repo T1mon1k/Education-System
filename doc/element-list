@@ -1,0 +1,5 @@
+project.education
+project.education.controller
+project.education.model
+project.education.repository
+project.education.service

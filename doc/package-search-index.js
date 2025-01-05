@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"project.education"},{"l":"project.education.controller"},{"l":"project.education.model"},{"l":"project.education.repository"},{"l":"project.education.service"}];updateSearchResults();
